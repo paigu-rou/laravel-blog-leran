@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * App\User
+ * App\Models\User
  *
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
@@ -20,7 +20,15 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * 指定对应的数据库表名称
+     *
+     * @var string
+     */
+    protected $table = 'users';
+
+    /**
+     * 只有包含在 $fillable 数组中的字段才能被正常更新
+     * 防御恶意表单提交
      *
      * @var array
      */
@@ -29,7 +37,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * 隐藏敏感信息
+     * TODO:如何隐藏的？
      *
      * @var array
      */
