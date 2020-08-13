@@ -23,10 +23,19 @@ class SessionsController extends Controller
         ]);
         // 验证失败
         if (Auth::attempt($credentials, $request->has('remember'))) {
-            session()->flash('success', '登录成功！');
-            return redirect()->intended(route('users.show', Auth::user()));
+            // 验证是否激活
+            if (Auth::user()->activated) {
+                session()->flash('success', '登录成功！');
+                return redirect()->intended(route('users.show', Auth::user()));
+            }
+            else {
+                // attempt 验证通过，需要先清除登录状态
+                Auth::logout();
+                session()->flash('danger', '请先到邮箱激活账号');
+                return redirect('/login');
+            }
         }
-        session()->flash('danger', '账号或密码错误！');
+        session()->flash('danger', '邮箱或密码错误！');
         return redirect('/login');
     }
 
